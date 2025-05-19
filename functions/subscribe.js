@@ -3,9 +3,9 @@ const admin = require("firebase-admin");
 
 // This part is typically handled automatically by Firebase Cloud Functions
 // but is included here to show the assumed initialization.
-// if (!admin.apps.length) {
-//   admin.initializeApp();
-// }
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
 
 const db = admin.firestore();
 
