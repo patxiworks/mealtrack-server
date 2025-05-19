@@ -4,6 +4,8 @@ const { getFirestore } = require("firebase-admin/firestore");
 const { getMessaging } = require('firebase-admin/messaging');
 const { format, addDays, startOfDay } = require('date-fns');
 
+const { subscribe } = require('./subscribe');
+
 initializeApp();
 
 const db = getFirestore();
@@ -95,3 +97,4 @@ const sendMessagesFromQueue = async (db, admin) => {
 
 exports.checkMealAvailability = onSchedule('0 7 * * *', async () => { await checkMissingMealAvailability(db, admin); });
 exports.sendMessages = onSchedule('*/15 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
+exports.subscribe = subscribe;
