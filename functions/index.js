@@ -4,9 +4,8 @@ const { getFirestore } = require("firebase-admin/firestore");
 const { getMessaging } = require('firebase-admin/messaging');
 const { format, addDays, startOfDay } = require('date-fns');
 
-const { subscribe } = require('./subscribe');
-
 initializeApp();
+const { subscribe } = require('./subscribe');
 
 const db = getFirestore();
 const admin = {
