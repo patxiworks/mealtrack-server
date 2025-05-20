@@ -98,7 +98,7 @@ const sendMessagesFromQueue = async (db, admin) => {
             while (retryCount < 3 && !success) {
                 try {
                     //console.log(pushSubscription)
-                    const response = await admin.messaging().sendToDevice(pushSubscription, messageData.message);
+                    const response = await admin.messaging().sendToDevice(JSON.stringify(pushSubscription), messageData.message);
                     console.log('Successfully sent message:', response);
                     success = true;
                 } catch (error) {
