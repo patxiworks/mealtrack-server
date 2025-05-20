@@ -90,8 +90,9 @@ const sendMessagesFromQueue = async (db, admin) => {
 
             let retryCount = messageData.retryCount || 0;
             const pushSubscription = userData.pushSubscription;
-            // const parts = pushSubscription.endpoint.split('/');
-            // const fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
+            const parts = pushSubscription.endpoint.split('/');
+            const fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
+            console.log(fcmToken)
             
             let success = false;
             while (retryCount < 3 && !success) {
@@ -122,5 +123,5 @@ const sendMessagesFromQueue = async (db, admin) => {
 };
 
 exports.checkMealAvailability = onSchedule('0 7 * * *', async () => { await checkMissingMealAvailability(db, admin); });
-exports.sendMessages = onSchedule('*/15 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
+exports.sendMessages = onSchedule('*/5 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
