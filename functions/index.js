@@ -22,19 +22,6 @@ const checkMissingMealAvailability = async (db, admin) => {
         const dayAfterTomorrowFormatted = format(dayAfterTomorrow, 'MMM d, yyyy');
         console.log(tomorrowFormatted, dayAfterTomorrowFormatted)
 
-        // const usersSnapshot = await db.collection('users')
-        //     .where(`mealAttendance.${tomorrowFormatted}`, '==', null)
-        //     .get();
-
-        // const usersSnapshot2 = await db.collection('users')
-        //     .where(`mealAttendance.${dayAfterTomorrowFormatted}`, '==', null)
-        //     .get();
-
-        // const allUserDocs = [...usersSnapshot.docs, ...usersSnapshot2.docs];
-        // const userIds = new Set();
-        // allUserDocs.forEach(userDoc => userIds.add(userDoc.id));
-        // console.log(usersSnapshot, usersSnapshot2.docs, userIds, allUserDocs)
-
         const userIds = new Set();
 
         // Get all users
@@ -106,6 +93,7 @@ const sendMessagesFromQueue = async (db, admin) => {
             let success = false;
             while (retryCount < 3 && !success) {
                 try {
+                    console.log(pushSubscription, messageData.message)
                     const response = await admin.messaging().sendToDevice(pushSubscription, messageData.message);
                     console.log('Successfully sent message:', response);
                     success = true;
@@ -130,6 +118,6 @@ const sendMessagesFromQueue = async (db, admin) => {
     }
 };
 
-exports.checkMealAvailability = onSchedule('*/10 * * * *', async () => { await checkMissingMealAvailability(db, admin); });
+exports.checkMealAvailability = onSchedule('0 7 * * *', async () => { await checkMissingMealAvailability(db, admin); });
 exports.sendMessages = onSchedule('*/15 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
