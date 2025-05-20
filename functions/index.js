@@ -32,6 +32,7 @@ const checkMissingMealAvailability = async (db, admin) => {
         const allUserDocs = [...usersSnapshot.docs, ...usersSnapshot2.docs];
         const userIds = new Set();
         allUserDocs.forEach(userDoc => userIds.add(userDoc.id));
+        console.log(userIds, allUserDocs)
 
         for (const userId of userIds) {
             const message = {
