@@ -81,7 +81,7 @@ const sendMessagesFromQueue = async (db, admin) => {
             let messageData = messageDoc.data();
             const userDoc = await db.collection('users').doc(userId).get();
             const userData = userDoc.data();
-            console.log(messageData, userData)
+            //console.log(messageData, userData)
 
             if (!userData || !userData.pushSubscription) {
                 await db.collection('messages').doc(userId).delete();
@@ -90,10 +90,11 @@ const sendMessagesFromQueue = async (db, admin) => {
 
             let retryCount = messageData.retryCount || 0;
             const pushSubscription = userData.pushSubscription;
+            console.log(messageData.message)
             let success = false;
             while (retryCount < 3 && !success) {
                 try {
-                    console.log(pushSubscription, messageData.message)
+                    console.log(pushSubscription)
                     const response = await admin.messaging().sendToDevice(pushSubscription, messageData.message);
                     console.log('Successfully sent message:', response);
                     success = true;
