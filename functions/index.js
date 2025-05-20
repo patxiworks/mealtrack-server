@@ -21,11 +21,11 @@ const checkMissingMealAvailability = async (db, admin) => {
         const tomorrowFormatted = format(tomorrow, 'yyyy-MM-dd');
         const dayAfterTomorrowFormatted = format(dayAfterTomorrow, 'yyyy-MM-dd');
 
-        const usersSnapshot = await db.collection('Users')
+        const usersSnapshot = await db.collection('users')
             .where(`mealAttendance.${tomorrowFormatted}`, '==', null)
             .get();
 
-        const usersSnapshot2 = await db.collection('Users')
+        const usersSnapshot2 = await db.collection('users')
             .where(`mealAttendance.${dayAfterTomorrowFormatted}`, '==', null)
             .get();
 
@@ -41,7 +41,7 @@ const checkMissingMealAvailability = async (db, admin) => {
                 }
             };
 
-            await db.collection('MessageQueue').doc(userId).set({
+            await db.collection('messages').doc(userId).set({
                 message
             });
         }
@@ -53,15 +53,15 @@ const checkMissingMealAvailability = async (db, admin) => {
 const sendMessagesFromQueue = async (db, admin) => {
     try {
         console.log('Sending messages from queue...');
-        const messageQueueSnapshot = await db.collection('MessageQueue').get();
+        const messageQueueSnapshot = await db.collection('messages').get();
         messageQueueSnapshot.forEach(async (messageDoc) => {
             const userId = messageDoc.id;
             let messageData = messageDoc.data();
-            const userDoc = await db.collection('Users').doc(userId).get();
+            const userDoc = await db.collection('users').doc(userId).get();
             const userData = userDoc.data();
 
             if (!userData || !userData.pushSubscription) {
-                await db.collection('MessageQueue').doc(userId).delete();
+                await db.collection('messages').doc(userId).delete();
                 return;
             }
 
@@ -76,16 +76,16 @@ const sendMessagesFromQueue = async (db, admin) => {
                 } catch (error) {
                     console.error('Error sending message:', error);
                     retryCount++;
-                    await db.collection('MessageQueue').doc(userId).update({ retryCount });
+                    await db.collection('messages').doc(userId).update({ retryCount });
                     await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before retrying
                 }
             }
 
             if (success) {
-                await db.collection('MessageQueue').doc(userId).delete();
+                await db.collection('messages').doc(userId).delete();
             } else {
                 console.error('Message failed to send after multiple retries:', userId);
-                await db.collection('MessageQueue').doc(userId).update({ retryCount: 0 });
+                await db.collection('messages').doc(userId).update({ retryCount: 0 });
             }
 
         });
@@ -95,5 +95,5 @@ const sendMessagesFromQueue = async (db, admin) => {
 };
 
 exports.checkMealAvailability = onSchedule('*/5 * * * *', async () => { await checkMissingMealAvailability(db, admin); });
-//exports.sendMessages = onSchedule('*/15 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
+exports.sendMessages = onSchedule('*/15 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
