@@ -90,14 +90,14 @@ const sendMessagesFromQueue = async (db, admin) => {
 
             let retryCount = messageData.retryCount || 0;
             const pushSubscription = userData.pushSubscription;
-            const parts = pushSubscription.endpoint.split('/');
-            const fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
+            // const parts = pushSubscription.endpoint.split('/');
+            // const fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
             
             let success = false;
             while (retryCount < 3 && !success) {
                 try {
                     //console.log(pushSubscription)
-                    const response = await admin.messaging().sendToDevice(fcmToken, messageData.message);
+                    const response = await admin.messaging().sendToDevice(pushSubscription, messageData.message);
                     console.log('Successfully sent message:', response);
                     success = true;
                 } catch (error) {
