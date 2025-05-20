@@ -10,6 +10,23 @@ const admin = require("firebase-admin");
 const db = admin.firestore();
 
 exports.subscribe = functions.https.onRequest(async (req, res) => {
+  const allowedOrigins = [
+    'https://mealtrack-nine.vercel.app', 
+    'https://9000-idx-studio-1745510583460.cluster-c3a7z3wnwzapkx3rfr5kz62dac.cloudworkstations.dev'
+  ];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+  }
+  res.set('Access-Control-Allow-Methods', 'POST'); // Allow the necessary HTTP methods
+  res.set('Access-Control-Allow-Headers', 'Content-Type'); // Allow the necessary headers
+  // Handle the preflight request (OPTIONS)
+  if (req.method === 'OPTIONS') {    
+    res.status(204).send('');
+    return;
+  }
+
   if (req.method !== "POST") {
     return res.status(405).send("Method Not Allowed");
   }
