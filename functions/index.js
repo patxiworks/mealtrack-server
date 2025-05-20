@@ -91,7 +91,7 @@ const sendMessagesFromQueue = async (db, admin) => {
             let retryCount = messageData.retryCount || 0;
             const pushSubscription = userData.pushSubscription;
             const parts = pushSubscription.endpoint.split('/');
-            fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
+            const fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
             
             let success = false;
             while (retryCount < 3 && !success) {
