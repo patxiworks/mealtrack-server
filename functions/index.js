@@ -22,18 +22,51 @@ const checkMissingMealAvailability = async (db, admin) => {
         const dayAfterTomorrowFormatted = format(dayAfterTomorrow, 'MMM d, yyyy');
         console.log(tomorrowFormatted, dayAfterTomorrowFormatted)
 
-        const usersSnapshot = await db.collection('users')
-            .where(`mealAttendance.${tomorrowFormatted}`, '==', null)
-            .get();
+        // const usersSnapshot = await db.collection('users')
+        //     .where(`mealAttendance.${tomorrowFormatted}`, '==', null)
+        //     .get();
 
-        const usersSnapshot2 = await db.collection('users')
-            .where(`mealAttendance.${dayAfterTomorrowFormatted}`, '==', null)
-            .get();
+        // const usersSnapshot2 = await db.collection('users')
+        //     .where(`mealAttendance.${dayAfterTomorrowFormatted}`, '==', null)
+        //     .get();
 
-        const allUserDocs = [...usersSnapshot.docs, ...usersSnapshot2.docs];
+        // const allUserDocs = [...usersSnapshot.docs, ...usersSnapshot2.docs];
+        // const userIds = new Set();
+        // allUserDocs.forEach(userDoc => userIds.add(userDoc.id));
+        // console.log(usersSnapshot, usersSnapshot2.docs, userIds, allUserDocs)
+
         const userIds = new Set();
-        allUserDocs.forEach(userDoc => userIds.add(userDoc.id));
-        console.log(userIds, allUserDocs)
+
+        // Get all users
+        const allUsersSnapshot = await db.collection('users').get();
+
+        for (const userDoc of allUsersSnapshot.docs) {
+            const userId = userDoc.id;
+            const userData = userDoc.data();
+            const mealAttendance = userData.mealAttendance;
+
+            // Check for tomorrow
+            if (!mealAttendance || !mealAttendance[tomorrowFormatted]) {
+                userIds.add(userId);
+            } else {
+                const { breakfast, lunch, dinner } = mealAttendance[tomorrowFormatted];
+                if (breakfast === null && lunch === null && dinner === null) {
+                    userIds.add(userId);
+                }
+            }
+
+            // Check for the day after tomorrow
+            if (!mealAttendance || !mealAttendance[dayAfterTomorrowFormatted]) {
+                userIds.add(userId);
+            } else {
+                const { breakfast, lunch, dinner } = mealAttendance[dayAfterTomorrowFormatted];
+                if (breakfast === null && lunch === null && dinner === null) {
+                    userIds.add(userId);
+                }
+            }
+        }
+
+        console.log(userIds)
 
         for (const userId of userIds) {
             const message = {
