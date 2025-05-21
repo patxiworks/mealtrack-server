@@ -60,6 +60,9 @@ const checkMissingMealAvailability = async (db, admin) => {
                 notification: {
                     title: 'Meal Availability Reminder',
                     body: 'Please set your meal availability for the next two days.',
+                },
+                data: {
+                    title: 'Meal Availability Reminder',
                 }
             };
 
@@ -92,13 +95,15 @@ const sendMessagesFromQueue = async (db, admin) => {
             const pushSubscription = userData.pushSubscription;
             const parts = pushSubscription.endpoint.split('/');
             const fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
-            console.log(fcmToken)
+            messageData.message.token = fcmToken
+            console.log(fcmToken, messageData.message)
             
             let success = false;
             while (retryCount < 3 && !success) {
                 try {
                     //console.log(pushSubscription)
-                    const response = await admin.messaging().sendToDevice(fcmToken, messageData.message);
+                    //const response = await admin.messaging().sendToDevice(fcmToken, messageData.message);
+                    const response = await admin.messaging().send(messageData.message);
                     console.log('Successfully sent message:', response);
                     success = true;
                 } catch (error) {
