@@ -32,7 +32,7 @@ exports.subscribe = functions.https.onRequest(async (req, res) => {
   }
 
   const { userId, pushSubscription } = req.body;
-  console.log(userId)
+  console.log(userId, pushSubscription)
 
   if (!userId || !pushSubscription) {
     return res.status(400).send("Missing userId or pushSubscription in request body.");
