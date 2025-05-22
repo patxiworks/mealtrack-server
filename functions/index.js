@@ -93,9 +93,9 @@ const sendMessagesFromQueue = async (db, admin) => {
             }
 
             let retryCount = messageData.retryCount || 0;
-            const pushSubscription = userData.pushSubscription;
-            const parts = pushSubscription.endpoint.split('/');
-            const fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
+            const fcmToken = userData.pushSubscription;
+            // const parts = pushSubscription.endpoint.split('/');
+            // const fcmToken = parts[parts.length - 1]; // Get the last segment of the URL
             messageData.message.token = fcmToken
             console.log(fcmToken, messageData.message)
             
