@@ -77,6 +77,7 @@ const checkMissingMealAvailability = async (db, admin) => {
 
 const sendMessagesFromQueue = async (db, admin) => {
     try {
+        const { FieldValue } = require('@google-cloud/firestore');
         console.log('Sending messages from queue...');
         const messageQueueSnapshot = await db.collection('messages').get();
         messageQueueSnapshot.forEach(async (messageDoc) => {
@@ -115,7 +116,6 @@ const sendMessagesFromQueue = async (db, admin) => {
                         break; // Stop retrying for this message
                     }
                     retryCount++;
-                    const { FieldValue } = require('@google-cloud/firestore');
                     await db.collection('messages').doc(userId).update({ retryCount });
                     await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before retrying
                 }
