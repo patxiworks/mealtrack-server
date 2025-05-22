@@ -84,7 +84,7 @@ const sendMessagesFromQueue = async (db, admin) => {
             let messageData = messageDoc.data();
             const userDoc = await db.collection('users').doc(userId).get();
             const userData = userDoc.data();
-            //console.log(messageData, userData)
+            console.log(messageData, userData)
 
             if (!userData || !userData.pushSubscription) {
                 await db.collection('messages').doc(userId).delete();
@@ -134,6 +134,6 @@ const sendMessagesFromQueue = async (db, admin) => {
     }
 };
 
-exports.checkMealAvailability = onSchedule('0 7 * * *', async () => { await checkMissingMealAvailability(db, admin); });
+exports.checkMealAvailability = onSchedule('*/10 * * * *', async () => { await checkMissingMealAvailability(db, admin); });
 exports.sendMessages = onSchedule('*/5 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
