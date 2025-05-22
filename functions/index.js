@@ -108,7 +108,14 @@ const sendMessagesFromQueue = async (db, admin) => {
                     success = true;
                 } catch (error) {
                     console.error('Error sending message:', error);
+                    if (error.code === 'messaging/registration-token-not-registered') {
+                        console.log(`Removing invalid token for user: ${userId}`);
+                        await db.collection('messages').doc(userId).delete();
+                        await db.collection('users').doc(userId).update({ pushSubscription: FieldValue.delete() });
+                        break; // Stop retrying for this message
+                    }
                     retryCount++;
+                    const { FieldValue } = require('@google-cloud/firestore');
                     await db.collection('messages').doc(userId).update({ retryCount });
                     await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before retrying
                 }
