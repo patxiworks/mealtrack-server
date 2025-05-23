@@ -53,16 +53,21 @@ const checkMissingMealAvailability = async (db, admin) => {
             }
         }
 
-        console.log(userIds)
+        //console.log(userIds)
 
         for (const userId of userIds) {
             const message = {
                 notification: {
-                    title: 'Meal Availability Reminder',
-                    body: 'Please set your meal availability for the next two days.',
+                    title: 'Meal Sheet Reminder',
+                    body: "You have not ticked for the next two days. You can do so now.",
                 },
                 data: {
-                    title: 'Meal Availability Reminder',
+                    url: 'https://mealtrack-nine.vercel.app/',
+                },
+                webpush: {
+                    fcm_options: {
+                        link: 'https://mealtrack-nine.vercel.app/',
+                    },
                 }
             };
 
