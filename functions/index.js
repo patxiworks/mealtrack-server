@@ -57,12 +57,11 @@ const checkMissingMealAvailability = async (db, admin) => {
 
         for (const userId of userIds) {
             const message = {
-                notification: {
+                data: {
                     title: 'Mealtick Reminder',
                     body: "Please tick for the next two days.",
-                },
-                data: {
                     icon: 'https://mealtrack-nine.vercel.app/mealtracker.png',
+                    url: 'https://mealtrack-nine.vercel.app/',
                 },
                 webpush: {
                     fcm_options: {
