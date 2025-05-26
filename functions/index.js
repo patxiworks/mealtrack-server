@@ -58,9 +58,9 @@ const checkMissingMealAvailability = async (db, admin) => {
         for (const userId of userIds) {
             const message = {
                 notification: {
-                    title: 'Mealtrack Reminder',
+                    title: 'Mealtick Reminder',
                     body: "Please tick for the next two days.",
-                    image: 'https://mealtrack-nine.vercel.app/mealtracker.png',
+                    icon: 'https://mealtrack-nine.vercel.app/mealtracker.png',
                 },
                 webpush: {
                     fcm_options: {
@@ -140,6 +140,6 @@ const sendMessagesFromQueue = async (db, admin) => {
     }
 };
 
-exports.checkMealAvailability = onSchedule('0 7 * * *', async () => { await checkMissingMealAvailability(db, admin); });
-exports.sendMessages = onSchedule('*/45 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
+exports.checkMealAvailability = onSchedule('*/5 * * * *', async () => { await checkMissingMealAvailability(db, admin); });
+exports.sendMessages = onSchedule('*/10 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
