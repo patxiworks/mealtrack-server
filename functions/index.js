@@ -58,8 +58,8 @@ const checkMissingMealAvailability = async (db, admin) => {
         for (const userId of userIds) {
             const message = {
                 data: {
-                    title: 'Mealtick Reminder',
-                    body: "Please tick for the next two days.",
+                    title: 'Mealticker Notice',
+                    body: "You haven't ticked for the next two days!",
                     icon: 'https://mealtrack-nine.vercel.app/mealtracker.png',
                     url: 'https://mealtrack-nine.vercel.app/',
                 },
@@ -67,7 +67,20 @@ const checkMissingMealAvailability = async (db, admin) => {
                     fcm_options: {
                         link: 'https://mealtrack-nine.vercel.app/',
                     },
-                }
+                },
+                android: {
+                  priority: "high",
+                },
+                apns: {
+                    headers: {
+                      'apns-priority': '10' // Set priority to high for iOS
+                    },
+                    payload: {
+                      aps: {
+                        'content-available': 1 // Essential for data messages on iOS to be treated as high priority
+                      }
+                    }
+                  }
             };
 
             await db.collection('messages').doc(userId).set({
