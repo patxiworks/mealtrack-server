@@ -18,8 +18,8 @@ const checkMissingMealAvailability = async (db, admin) => {
         const today = startOfDay(new Date());
         const tomorrow = addDays(today, 1);
         const dayAfterTomorrow = addDays(today, 2);
-        const tomorrowFormatted = format(tomorrow, 'MMM d, yyyy');
-        const dayAfterTomorrowFormatted = format(dayAfterTomorrow, 'MMM d, yyyy');
+        const tomorrowFormatted = format(tomorrow, 'MMM dd, yyyy');
+        const dayAfterTomorrowFormatted = format(dayAfterTomorrow, 'MMM dd, yyyy');
         console.log(tomorrowFormatted, dayAfterTomorrowFormatted)
 
         const userIds = new Set();
