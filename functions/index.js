@@ -13,7 +13,6 @@ const admin = {
 };
 
 const checkMissingMealAvailability = async (db, admin) => {
-    console.log('16. Checking for missing meal availability...');
     try {
         console.log('Checking for missing meal availability...');
         const today = startOfDay(new Date());
@@ -54,7 +53,7 @@ const checkMissingMealAvailability = async (db, admin) => {
             }
         }
 
-        //console.log(userIds)
+        console.log(userIds)
 
         for (const userId of userIds) {
             const message = {
