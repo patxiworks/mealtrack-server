@@ -35,6 +35,7 @@ const checkMissingMealAvailability = async (db, admin) => {
             // Check for tomorrow
             if (!mealAttendance || !mealAttendance[tomorrowFormatted]) {
                 userIds.add(userId);
+                console.log(userId, tomorrowFormatted, mealAttendance[tomorrowFormatted])
             } else {
                 const { breakfast, lunch, dinner } = mealAttendance[tomorrowFormatted];
                 if (breakfast === null && lunch === null && dinner === null) {
@@ -45,6 +46,7 @@ const checkMissingMealAvailability = async (db, admin) => {
             // Check for the day after tomorrow
             if (!mealAttendance || !mealAttendance[dayAfterTomorrowFormatted]) {
                 userIds.add(userId);
+                console.log(userId, dayAfterTomorrowFormatted, mealAttendance[dayAfterTomorrowFormatted])
             } else {
                 const { breakfast, lunch, dinner } = mealAttendance[dayAfterTomorrowFormatted];
                 if (breakfast === null && lunch === null && dinner === null) {
@@ -53,7 +55,7 @@ const checkMissingMealAvailability = async (db, admin) => {
             }
         }
 
-        console.log(userIds)
+        //console.log(userIds)
 
         for (const userId of userIds) {
             const message = {
