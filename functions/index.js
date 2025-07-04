@@ -123,8 +123,8 @@ const sendMessagesFromQueue = async (db, admin) => {
                 try {
                     //console.log(pushSubscription)
                     //const response = await admin.messaging().sendToDevice(fcmToken, messageData.message);
-                    const response = await admin.messaging().send(messageData.message);
-                    console.log('Successfully sent message:', response);
+                    //const response = await admin.messaging().send(messageData.message);
+                    //console.log('Successfully sent message:', response);
                     success = true;
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -154,5 +154,5 @@ const sendMessagesFromQueue = async (db, admin) => {
 };
 
 exports.checkMealAvailability = onSchedule('*/5 * * * *', async () => { await checkMissingMealAvailability(db, admin); });
-//exports.sendMessages = onSchedule('*/45 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
+exports.sendMessages = onSchedule('*/45 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
