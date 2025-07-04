@@ -55,7 +55,7 @@ const checkMissingMealAvailability = async (db, admin) => {
             }
         }
 
-        //console.log(userIds)
+        console.log(userIds)
 
         for (const userId of userIds) {
             const message = {
@@ -153,6 +153,6 @@ const sendMessagesFromQueue = async (db, admin) => {
     }
 };
 
-exports.checkMealAvailability = onSchedule('0 17 * * *', async () => { await checkMissingMealAvailability(db, admin); });
-exports.sendMessages = onSchedule('*/60 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
+exports.checkMealAvailability = onSchedule('*/5 * * * *', async () => { await checkMissingMealAvailability(db, admin); });
+exports.sendMessages = onSchedule('*/5 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
