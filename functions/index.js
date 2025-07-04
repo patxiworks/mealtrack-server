@@ -35,7 +35,7 @@ const checkMissingMealAvailability = async (db, admin) => {
             // Check for tomorrow
             if (!mealAttendance || !mealAttendance[tomorrowFormatted]) {
                 userIds.add(userId);
-                console.log(userId, tomorrowFormatted, mealAttendance[tomorrowFormatted])
+                //console.log(userId, tomorrowFormatted, mealAttendance[tomorrowFormatted])
             } else {
                 const { breakfast, lunch, dinner } = mealAttendance[tomorrowFormatted];
                 if (breakfast === null && lunch === null && dinner === null) {
@@ -46,7 +46,7 @@ const checkMissingMealAvailability = async (db, admin) => {
             // Check for the day after tomorrow
             if (!mealAttendance || !mealAttendance[dayAfterTomorrowFormatted]) {
                 userIds.add(userId);
-                console.log(userId, dayAfterTomorrowFormatted, mealAttendance[dayAfterTomorrowFormatted])
+                //console.log(userId, dayAfterTomorrowFormatted, mealAttendance[dayAfterTomorrowFormatted])
             } else {
                 const { breakfast, lunch, dinner } = mealAttendance[dayAfterTomorrowFormatted];
                 if (breakfast === null && lunch === null && dinner === null) {
@@ -61,7 +61,7 @@ const checkMissingMealAvailability = async (db, admin) => {
             const message = {
                 data: {
                     title: 'Mealticker Notice',
-                    body: "You haven't ticked for the next two days!",
+                    body: `[${userId}] You haven't ticked for the next two days!`,
                     icon: 'https://mealtrack-nine.vercel.app/mealtracker.png',
                     url: 'https://mealtrack-nine.vercel.app/',
                 },
@@ -91,7 +91,6 @@ const checkMissingMealAvailability = async (db, admin) => {
         }
     } catch (error) {
         console.error("Error in checkMissingMealAvailability: ", error)
-        console.log("Error in checkMissingMealAvailability: ", error)
     }
 };
 
@@ -124,8 +123,8 @@ const sendMessagesFromQueue = async (db, admin) => {
                 try {
                     //console.log(pushSubscription)
                     //const response = await admin.messaging().sendToDevice(fcmToken, messageData.message);
-                    //const response = await admin.messaging().send(messageData.message);
-                    //console.log('Successfully sent message:', response);
+                    const response = await admin.messaging().send(messageData.message);
+                    console.log('Successfully sent message:', response);
                     success = true;
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -154,6 +153,6 @@ const sendMessagesFromQueue = async (db, admin) => {
     }
 };
 
-exports.checkMealAvailability = onSchedule('*/5 * * * *', async () => { await checkMissingMealAvailability(db, admin); });
-exports.sendMessages = onSchedule('*/45 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
+exports.checkMealAvailability = onSchedule('0 17 * * *', async () => { await checkMissingMealAvailability(db, admin); });
+exports.sendMessages = onSchedule('*/60 * * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
