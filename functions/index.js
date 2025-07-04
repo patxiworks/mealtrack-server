@@ -13,6 +13,7 @@ const admin = {
 };
 
 const checkMissingMealAvailability = async (db, admin) => {
+    console.log('16. Checking for missing meal availability...');
     try {
         console.log('Checking for missing meal availability...');
         const today = startOfDay(new Date());
@@ -89,6 +90,7 @@ const checkMissingMealAvailability = async (db, admin) => {
         }
     } catch (error) {
         console.error("Error in checkMissingMealAvailability: ", error)
+        console.log("Error in checkMissingMealAvailability: ", error)
     }
 };
 
