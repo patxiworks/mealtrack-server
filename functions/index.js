@@ -154,5 +154,5 @@ const sendMessagesFromQueue = async (db, admin) => {
 };
 
 exports.checkMealAvailability = onSchedule('0 17 * * *', async () => { await checkMissingMealAvailability(db, admin); });
-exports.sendMessages = onSchedule('0 17 * * *', async () => { await sendMessagesFromQueue(db, admin); });
+exports.sendMessages = onSchedule('0 16 * * *', async () => { await sendMessagesFromQueue(db, admin); });
 exports.subscribe = subscribe;
